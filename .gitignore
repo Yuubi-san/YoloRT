@@ -1,0 +1,8 @@
+/microsoft.windows.cppwinrt.x.x.x.x.nupkg
+/bin/cppwinrt.exe
+/winrt
+/include/winrt/yolort_impl/winrt
+/include/winrt/*.*
+/test/*.exe
+/example/*.exe
+/*.html

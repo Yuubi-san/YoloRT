@@ -1,0 +1,26 @@
+--- winrt/base.h
++++ include/winrt/yolort_impl/winrt/base.h
+@@ -3102,6 +3102,12 @@
+         {
+             return reinterpret_cast<R const&>(object);
+         }
++
++        template <typename R>
++        operator R () const noexcept
++        {
++            return static_cast<R const&>(*this);
++        }
+     };
+ 
+     template <typename T>
+@@ -8112,7 +8118,9 @@
+ 
+         static time_point from_time_t(time_t time) noexcept
+         {
+-            return from_sys(std::chrono::system_clock::from_time_t(time));
++            return std::chrono::time_point_cast<time_point::duration>(
++                   from_sys(std::chrono::system_clock::from_time_t(time))
++            );
+         }
+ 
+         static file_time to_file_time(time_point const& time) noexcept
