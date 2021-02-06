@@ -21,8 +21,14 @@ it) or maintain a fork.
 These instructions assume you (1) don't have the original (MSVC-specific) winrt
 headers to apply the patches to and (2) want to generate said headers.
 
-### `cppwinrt` (the generator)
+### Dependencies
 
+`make`, `cppwinrt`, coreutils, `grep`, `patch`, `sed`, `xargs`. On MSYS2, this
+would be:
+
+`# pacman --sync --needed make coreutils grep patch sed findutils`
+
+#### `cppwinrt` (the generator)
 If you don't have (the desired version of) `cppwinrt` and don't want to / cannot
 build from [source](https://github.com/microsoft/cppwinrt), you can obtain it by
 invoking
@@ -30,8 +36,9 @@ invoking
 `$ make bin/cppwinrt.exe`
 
 This will download the latest build
-[from nuget.org](https://www.nuget.org/packages/Microsoft.Windows.CppWinRT/). If
-latest doesn't work for you in the end, try
+[from nuget.org](https://www.nuget.org/packages/Microsoft.Windows.CppWinRT/).
+You'll need `curl` and `unzip` (if using MSYS2: `# pacman --sync --needed curl
+unzip`). If latest doesn't work for you in the end, try
 
 `$ make CPPWINRT_VERSION=2.0.210122.3 bin/cppwinrt.exe`
 
@@ -61,6 +68,9 @@ It is highly recommended to run tests if you have some other combination than
 windows 8.1 x86-64 & cppwinrt 2.0.210122.3 & g++ 10:
 
 `$ (cd test && make --jobs=$(nproc))`
+
+You'll actually need MinGW for this. The package names in MSYS2 repo are
+`mingw-w64-{i686,x86_64}-gcc`.
 
 Right now, the testing procedure comprises, mostly: including each of the API
 headers into separate hello-world-ish programs, compiling and running them. It
