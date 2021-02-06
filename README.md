@@ -7,7 +7,7 @@
 Patches and scripts to make the C++ "binding" of Windows Runtime (WinRT) more
 C++ and less microsoft. In particular, to make it usable with MinGW. Little
 effort (if any) has been put into keeping the code consumable by MSVC (I'm not
-*against* the idea, but neither have MSVC nor the time).
+*against* the idea, but have neither MSVC nor the time).
 
 
 ## Why this exists
