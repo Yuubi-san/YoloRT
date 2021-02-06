@@ -105,7 +105,7 @@ w8.1 metadata.
 
 ## Examples
 
-See the [`examples`](examples/) subdir. Currently only a minimal working example
+See the [`example`](example/) subdir. Currently only a minimal working example
 of sending toast notifications is provided. To build, run `$ make` from within
 the directory.
 
