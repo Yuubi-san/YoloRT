@@ -80,7 +80,7 @@ default.
 ## Usage
 
 Currently requires a hacky incantation in the form of an option added to your
-`CXXFLAGS`:
+preprocessor flags (`CPPFLAGS`):
 
 `-iquote /usr/local/include/winrt/yolort_impl`
 

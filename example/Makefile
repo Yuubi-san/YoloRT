@@ -1,6 +1,6 @@
 
 include ../Makefile.flags
-override CXXFLAGS += -I ../include -iquote ../include/winrt/yolort_impl
+override CPPFLAGS += -I ../include -iquote ../include/winrt/yolort_impl
 override LDLIBS   := -lole32 -loleaut32
 
 srcs := $(wildcard *.cpp)
