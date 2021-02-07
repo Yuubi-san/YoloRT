@@ -13,25 +13,11 @@ using std::nullptr_t;  // for unqualified nullptr_t in winrt/base.h
 #include <climits>     // for UINT_MAX in winrt/base.h
 
 
-// mingw apparently doesn't(?) yet implement these as of gcc 10:
-
-constexpr auto _ReturnAddress[[gnu::always_inline]]() noexcept
-{ return __builtin_return_address(0); }
-
-#include <atomic>
+#include <intrin.h>
+// work around the `undefined reference to _ReturnAddress` for now...
+#define _ReturnAddress() __builtin_return_address(0)
 #include <cstdint>
-
-inline auto _ReadWriteBarrier() noexcept
-{ std::atomic_thread_fence( std::memory_order_seq_cst ); }
-
-constexpr auto _InterlockedIncrement64(
-  std::int64_t volatile *const p ) noexcept
-{ return __atomic_add_fetch( p, 1, __ATOMIC_SEQ_CST ); }
-
-constexpr auto _InterlockedDecrement64(
-  std::int64_t volatile *const p ) noexcept
-{ return __atomic_sub_fetch( p, 1, __ATOMIC_SEQ_CST ); }
-
+// mingw apparently doesn't(?) yet implement this one as of gcc 10:
 inline unsigned char _InterlockedCompareExchange128(
   std::int64_t volatile *const pcurrent,
   std::int64_t const desired_hi,
@@ -47,21 +33,6 @@ inline unsigned char _InterlockedCompareExchange128(
     /*success_memorder =*/ __ATOMIC_SEQ_CST,
     /*failure_memorder =*/ __ATOMIC_SEQ_CST
   );
-}
-
-constexpr void *_InterlockedCompareExchangePointer(
-	void *volatile *const pcurrent,
-	void *const desired,
-	void *expected ) noexcept
-{
-  (void)__atomic_compare_exchange_n
-  (
-    pcurrent, &expected, desired,
-    /*weak =*/ false,
-    /*success_memorder =*/ __ATOMIC_SEQ_CST,
-    /*failure_memorder =*/ __ATOMIC_SEQ_CST
-  );
-  return expected;
 }
 
 
