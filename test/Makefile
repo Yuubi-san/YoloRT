@@ -7,7 +7,7 @@ exes := $(apis:../winrt/%.h=%.exe)
 
 .PHONY: tests
 tests: retaddr.exe $(exes)
-	retaddr.exe
+	./retaddr.exe
 	for exe in $(exes); do ./$$exe || exit 1; done
 
 $(exes): %.exe: ../include/winrt/%.h ../include/winrt/yolort_impl/winrt/%.h ../include/winrt/yolort_impl/yolo.ipp test.cpp
