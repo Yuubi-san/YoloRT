@@ -24,14 +24,11 @@ inline unsigned char _InterlockedCompareExchange128(
   std::int64_t const desired_lo,
   std::int64_t *const pexpected ) noexcept
 {
-  return __atomic_compare_exchange_n
+  return __sync_bool_compare_and_swap
   (
     reinterpret_cast<__int128_t volatile *>(pcurrent),
-    reinterpret_cast<__int128_t *>(pexpected),
-    __int128_t{desired_hi} << 64 | desired_lo,
-    /*weak =*/ false,
-    /*success_memorder =*/ __ATOMIC_SEQ_CST,
-    /*failure_memorder =*/ __ATOMIC_SEQ_CST
+    *reinterpret_cast<__int128_t *>(pexpected),
+    __int128_t{desired_hi} << 64 | desired_lo
   );
 }
 

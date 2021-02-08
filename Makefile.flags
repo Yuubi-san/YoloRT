@@ -1,5 +1,5 @@
 
-override CPPFLAGS := -pipe -Wall -Wextra -Wpedantic -Wconversion \
+override CPPFLAGS := -mcx16 -pipe -Wall -Wextra -Wpedantic -Wconversion \
 	-Wcast-align -Wformat=2 -Wstrict-overflow=5 \
 	-Wno-unknown-pragmas -fdiagnostics-color=always $(CPPFLAGS)
 
