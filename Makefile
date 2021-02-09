@@ -78,7 +78,10 @@ pristine: cleaner
 
 .PHONY: install
 install:
-	cp -r include/winrt "$PREFIX/include"
+	cp -r \
+		include/winrt \
+		include/WindowsNumerics.impl.h \
+		"$PREFIX/include"
 
 
 
