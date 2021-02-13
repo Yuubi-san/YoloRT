@@ -4,5 +4,6 @@
 /include/winrt/yolort_impl/winrt
 /include/winrt/*.*
 /test/*.exe
+/test/all.ok
 /example/*.exe
 /*.html
