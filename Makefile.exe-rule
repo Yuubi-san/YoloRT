@@ -1,0 +1,3 @@
+
+%.exe: %.cpp
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) "$<" -o "$@" $(LDLIBS)

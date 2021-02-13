@@ -1,4 +1,5 @@
 
+include ../Makefile.exe-rule
 include ../Makefile.flags
 override CPPFLAGS += -I ../include -iquote ../include/winrt/yolort_impl
 override LDLIBS   := -lole32 -loleaut32
@@ -9,7 +10,7 @@ exes := $(srcs:.cpp=.exe)
 .PHONY: examples
 examples: $(exes)
 
-$(exes): %.exe: %
+$(exes):
 
 naughtyfication.exe: ../include/winrt/Windows.Data.Xml.Dom.h ../include/winrt/Windows.UI.Notifications.h
 

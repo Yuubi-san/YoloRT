@@ -1,4 +1,5 @@
 
+include ../Makefile.exe-rule
 include ../Makefile.flags
 override CPPFLAGS += -I ../include -iquote ../include/winrt/yolort_impl
 
@@ -13,7 +14,7 @@ tests: $(all_exes)
 $(api_exes): %.exe: ../include/winrt/%.h ../include/winrt/yolort_impl/winrt/%.h ../include/winrt/yolort_impl/yolo.ipp test.cpp
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS) "-DHEADER=$(@:%.exe=<winrt/%.h>)" test.cpp -o $@ $(LDLIBS)
 
-intrin.exe: %.exe: %.cpp ../include/winrt/yolort_impl/yolo.ipp %
+intrin.exe: ../include/winrt/yolort_impl/yolo.ipp
 
 .PHONY: clean
 clean:
