@@ -37,10 +37,9 @@ $(copied_or_patched): include/winrt/yolort_impl/%: %
 
 $(wrappers): include/%: %
 	@echo "echo \$$cxx_code_here > $@"
-	@echo -e "\
-#define HEADER_IMPL <$(@:include/%=winrt/yolort_impl/%)>\n\
-#include <winrt/yolort_impl/yolo.ipp>\n\
-#undef HEADER_IMPL" > $@
+	@echo "#define HEADER_IMPL <$(@:include/%=winrt/yolort_impl/%)>" > "$@" && \
+		echo "#include <winrt/yolort_impl/yolo.ipp>" >> "$@" && \
+		echo "#undef HEADER_IMPL" >> "$@"
 
 .PHONY: clean
 clean:
