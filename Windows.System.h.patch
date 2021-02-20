@@ -1,5 +1,5 @@
 --- winrt/Windows.System.h
-+++ include/winrt/yolort_impl/winrt/Windows.System.h
++++ patched/Windows.System.h
 @@ -422,6 +422,7 @@
  
  WINRT_EXPORT namespace winrt

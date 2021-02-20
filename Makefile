@@ -6,26 +6,27 @@ rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) \
 	$(filter $(subst *,%,$2),$d))
 
 originals            := $(call rwildcard,winrt/,*.h)
-copied_or_patched    := $(originals:%=include/winrt/yolort_impl/%)
+results              := $(originals:%=include/winrt/yolort_impl/%)
 patches              := $(wildcard *.patch)
-patched              := $(patsubst %.patch, include/winrt/yolort_impl/winrt/%, \
+patched_intermediates := $(patches:%.patch=patched/%)
+patched_results      := $(patsubst %.patch, include/winrt/yolort_impl/winrt/%, \
 	$(patches))
 apis                 := $(wildcard winrt/*.h)
 wrappers             := $(apis:%=include/%)
 
 .PHONY: default
-default: copied_or_patched wrappers
-.PHONY: copied_or_patched
-copied_or_patched: $(copied_or_patched)
+default: results wrappers
+.PHONY: results
+results: $(results)
 .PHONY: wrappers
 wrappers: $(wrappers)
 
-$(patched):           include/winrt/yolort_impl/winrt/%: %.patch
-$(copied_or_patched): include/winrt/yolort_impl/%: %
+$(patched_results):   include/winrt/yolort_impl/winrt/%: patched/%
+$(results):           include/winrt/yolort_impl/%: %
 	mkdir --parents `echo "$@" | egrep --only-matching "^([^/]+/)+"`
-	@if test -f "$(<:winrt/%=%.patch)"; then \
-		echo patch "$<" "$(<:winrt/%=%.patch)" -o "$@"; \
-		patch "$<" "$(<:winrt/%=%.patch)" -o "$@"; \
+	@if test -f "$(<:winrt/%=patched/%)"; then \
+		echo cp "$(<:winrt/%=patched/%)" "$@"; \
+		cp "$(<:winrt/%=patched/%)" "$@"; \
 	else \
 		echo cp "$<" "$@"; \
 		cp "$<" "$@"; \
@@ -35,6 +36,12 @@ $(copied_or_patched): include/winrt/yolort_impl/%: %
 		sed --regexp-extended "s/^.+\((.+)$$/-es\/WINRT_IMPL_\1\/\1\//" | \
 		xargs sed "$@" --in-place
 
+.PHONY: patched_intermediates
+patched_intermediates: $(patched_intermediates)
+$(patched_intermediates): patched/%: winrt/% %.patch
+	@mkdir --parents `echo "$@" | egrep --only-matching "^([^/]+/)+"`
+	patch "$<" "$(<:winrt/%=%.patch)" -o "$@"
+
 $(wrappers): include/%: %
 	@echo "echo \$$cxx_code_here > $@"
 	@echo "#define HEADER_IMPL <$(@:include/%=winrt/yolort_impl/%)>" > "$@" && \
@@ -43,7 +50,8 @@ $(wrappers): include/%: %
 
 .PHONY: clean
 clean:
-	$(RM) $(copied_or_patched) $(wrappers) *.html
+	$(RM) $(results) $(patched_intermediates) $(wrappers) *.html
+	rmdir --ignore-fail-on-non-empty patched
 
 
 
@@ -87,13 +95,13 @@ install:
 # development stuff
 
 .PHONY: patches
-patches: base.h-patch Windows.System.h-patch
+patches: $(patsubst patched/%, %-patch, $(wildcard patched/*))
 
 .PHONY: %-patch
 %-patch: winrt/%
 	(diff --unified \
 		--label="$<" "$<" \
-		--label="include/winrt/yolort_impl/$<" "include/winrt/yolort_impl/$<"; \
+		--label="patched/$(@:-patch=)" "patched/$(@:-patch=)"; \
 		test $$? != 2) > $(@:-patch=.patch)
 
 

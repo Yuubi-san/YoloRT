@@ -1,5 +1,5 @@
 --- winrt/base.h
-+++ include/winrt/yolort_impl/winrt/base.h
++++ patched/base.h
 @@ -3102,6 +3102,12 @@
          {
              return reinterpret_cast<R const&>(object);

@@ -1,6 +1,7 @@
 /microsoft.windows.cppwinrt.x.x.x.x.nupkg
 /bin/cppwinrt.exe
 /winrt
+/patched
 /include/winrt/yolort_impl/winrt
 /include/winrt/*.*
 /test/*.exe
