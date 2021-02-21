@@ -2,7 +2,7 @@
 include ../Makefile.exe-rule
 include ../Makefile.flags
 override CPPFLAGS += -I ../include -iquote ../include/winrt/yolort_impl
-override LDLIBS   := -lole32 -loleaut32
+override LDLIBS   += -lole32 -loleaut32
 
 srcs := $(wildcard *.cpp)
 exes := $(srcs:.cpp=.exe)
