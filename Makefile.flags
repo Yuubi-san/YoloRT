@@ -3,4 +3,4 @@ override CPPFLAGS := -mcx16 -pipe -Wall -Wextra -Wpedantic -Wconversion \
 	-Wcast-align -Wformat=2 -Wstrict-overflow=5 \
 	-Wno-unknown-pragmas -fdiagnostics-color=always $(CPPFLAGS)
 
-override CXXFLAGS := -std=c++17 -fcoroutines -Wsign-promo $(CXXFLAGS)
+override CXXFLAGS := -std=c++17 -Wsign-promo $(CXXFLAGS)

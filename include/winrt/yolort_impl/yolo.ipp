@@ -6,7 +6,9 @@
 #define YOLORT_WRAP_IPP
 
 // just microsoft things
-#include <coroutine>   // for __cpp_lib_coroutine in winrt/base.h
+#if __has_include(<version>)
+#include <version>     // for __cpp_lib_coroutine in winrt/base.h
+#endif
 #include <cstring>     // for memcmp in winrt/base.h
 #include <cstddef>
 using std::nullptr_t;  // for unqualified nullptr_t in winrt/base.h

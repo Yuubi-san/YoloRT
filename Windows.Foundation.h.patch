@@ -1,0 +1,64 @@
+--- winrt/Windows.Foundation.h
++++ patched/Windows.Foundation.h
+@@ -2921,6 +2921,7 @@
+     private:
+         static fire_and_forget cancel_asynchronously(Async async)
+         {
++#ifdef WINRT_IMPL_COROUTINES
+             co_await winrt::resume_background();
+             try
+             {
+@@ -2929,6 +2930,10 @@
+             catch (hresult_error const&)
+             {
+             }
++#else
++            static_assert( !sizeof(Async), "don't use me without coroutine support" );
++            return {};
++#endif
+         }
+     };
+ 
+@@ -3385,8 +3390,10 @@
+ 
+ #ifdef __cpp_lib_coroutine
+ namespace std
+-#else
++#elif __has_include(<experimental/coroutine>)
+ namespace std::experimental
++#else
++namespace corostub
+ #endif
+ {
+     template <typename... Args>
+@@ -3513,13 +3520,19 @@
+     template <typename... T>
+     Windows::Foundation::IAsyncAction when_all(T... async)
+     {
++#ifdef WINRT_IMPL_COROUTINES
+         (void(co_await async), ...);
+         co_return;
++#else
++        static_assert( !sizeof(std::tuple<T...>), "don't use me without coroutine support" );
++        return {};
++#endif
+     }
+ 
+     template <typename T, typename... Rest>
+     T when_any(T const& first, Rest const& ... rest)
+     {
++#ifdef WINRT_IMPL_COROUTINES
+         static_assert(impl::has_category_v<T>, "T must be WinRT async type such as IAsyncAction or IAsyncOperation.");
+         static_assert((std::is_same_v<T, Rest> && ...), "All when_any parameters must be the same type.");
+ 
+@@ -3554,6 +3567,10 @@
+         co_await resume_on_signal(shared->event.get());
+         impl::check_status_canceled(shared->status);
+         co_return shared->result.GetResults();
++#else
++        static_assert( !sizeof(T), "don't use me without coroutine support" );
++        return {};
++#endif
+     }
+ }
+ #endif

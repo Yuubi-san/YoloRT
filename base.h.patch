@@ -1,6 +1,35 @@
 --- winrt/base.h
 +++ patched/base.h
-@@ -3102,6 +3102,12 @@
+@@ -43,7 +43,7 @@
+     using suspend_never = std::suspend_never;
+ }
+ 
+-#else
++#elif __has_include(<experimental/coroutine>)
+ 
+ #include <experimental/coroutine>
+ 
+@@ -56,6 +56,19 @@
+     using suspend_never = std::experimental::suspend_never;
+ }
+ 
++#else
++
++#include <winrt/yolort_impl/corostub.hpp>
++
++namespace winrt::impl
++{
++    template <typename T = void>
++    using coroutine_handle = corostub::coroutine_handle<T>;
++
++    using suspend_always = corostub::suspend_always;
++    using suspend_never = corostub::suspend_never;
++}
++
+ #endif
+ 
+ #ifdef _DEBUG
+@@ -3102,6 +3115,12 @@
          {
              return reinterpret_cast<R const&>(object);
          }
@@ -13,7 +42,7 @@
      };
  
      template <typename T>
-@@ -8112,7 +8118,9 @@
+@@ -8112,7 +8131,9 @@
  
          static time_point from_time_t(time_t time) noexcept
          {
@@ -24,3 +53,15 @@
          }
  
          static file_time to_file_time(time_point const& time) noexcept
+@@ -8949,8 +8970,10 @@
+ 
+ #ifdef __cpp_lib_coroutine
+ namespace std
+-#else
++#elif __has_include(<experimental/coroutine>)
+ namespace std::experimental
++#else
++namespace corostub
+ #endif
+ {
+     template <typename... Args>
