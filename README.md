@@ -108,12 +108,6 @@ Otherwise, `#include <winrt/Windows.Foo.h>` as usual.
 The module unit (`winrt/winrt.ixx`) likely doesn't and, thus, isn't present in
 the final output. (Meh, GCC doesn't yet really have modules support anyway.)
 
-A tiny piece (don't know how important) of `winrt/Windows.System.h` has been
-YOLO-cut to make compilable the version of it generated from windows 8.1
-metadata files, which, I presume, lack some things present in windows 10
-metadata, and I presume the generator assumes only w10 exists. Or it's a bug in
-w8.1 metadata.
-
 
 ## Examples
 
