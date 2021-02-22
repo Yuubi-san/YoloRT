@@ -20,18 +20,24 @@ using std::nullptr_t;  // for unqualified nullptr_t in winrt/base.h
 #define _ReturnAddress() __builtin_return_address(0)
 #include <cstdint>
 // mingw apparently doesn't(?) yet implement this one as of gcc 10:
+template<typename Dummy = int>
 inline unsigned char _InterlockedCompareExchange128(
   std::int64_t volatile *const pcurrent,
   std::int64_t const desired_hi,
   std::int64_t const desired_lo,
   std::int64_t *const pexpected ) noexcept
 {
+#ifdef _WIN64
   return __sync_bool_compare_and_swap
   (
     reinterpret_cast<__int128_t volatile *>(pcurrent),
     *reinterpret_cast<__int128_t *>(pexpected),
     __int128_t{desired_hi} << 64 | desired_lo
   );
+#else
+  static_assert( !sizeof(Dummy), "not implemented for 32-bit targets" );
+  return {};
+#endif
 }
 
 
