@@ -1,6 +1,19 @@
 --- winrt/base.h
 +++ patched/base.h
-@@ -43,7 +43,7 @@
+@@ -27,8 +27,12 @@
+ 
+ #if __has_include(<WindowsNumerics.impl.h>)
+ #define WINRT_IMPL_NUMERICS
++#if __has_include(<directxmath.h>)
++// mingw 6.0.0 headers don't have this and it *seems* unused in winrt, but
++// leaving it in just in case:
+ #include <directxmath.h>
+ #endif
++#endif
+ 
+ #ifdef __cpp_lib_coroutine
+ 
+@@ -43,7 +47,7 @@
      using suspend_never = std::suspend_never;
  }
  
@@ -9,7 +22,7 @@
  
  #include <experimental/coroutine>
  
-@@ -56,6 +56,19 @@
+@@ -56,6 +60,19 @@
      using suspend_never = std::experimental::suspend_never;
  }
  
@@ -29,7 +42,7 @@
  #endif
  
  #ifdef _DEBUG
-@@ -3102,6 +3115,12 @@
+@@ -3102,6 +3119,12 @@
          {
              return reinterpret_cast<R const&>(object);
          }
@@ -42,7 +55,7 @@
      };
  
      template <typename T>
-@@ -8112,7 +8131,9 @@
+@@ -8112,7 +8135,9 @@
  
          static time_point from_time_t(time_t time) noexcept
          {
@@ -53,7 +66,7 @@
          }
  
          static file_time to_file_time(time_point const& time) noexcept
-@@ -8949,8 +8970,10 @@
+@@ -8949,8 +8974,10 @@
  
  #ifdef __cpp_lib_coroutine
  namespace std
