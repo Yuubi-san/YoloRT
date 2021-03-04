@@ -42,7 +42,23 @@
  #endif
  
  #ifdef _DEBUG
-@@ -3102,6 +3119,12 @@
+@@ -355,6 +372,7 @@
+ __declspec(selectany) void(__stdcall* winrt_resume_handler)(void const* token) noexcept {};
+ __declspec(selectany) int32_t(__stdcall* winrt_activation_handler)(void* classId, winrt::guid const& iid, void** factory) noexcept {};
+ 
++namespace winrt {
+ extern "C"
+ {
+     void* __stdcall WINRT_IMPL_LoadLibraryW(wchar_t const* name) noexcept;
+@@ -431,6 +449,7 @@
+     int32_t __stdcall WINRT_CanUnloadNow() noexcept;
+     int32_t __stdcall WINRT_GetActivationFactory(void* classId, void** factory) noexcept;
+ }
++}  // namespace winrt
+ 
+ #ifdef _M_HYBRID
+ #define WINRT_IMPL_LINK(function, count) __pragma(comment(linker, "/alternatename:#WINRT_IMPL_" #function "@" #count "=#" #function "@" #count))
+@@ -3102,6 +3121,12 @@
          {
              return reinterpret_cast<R const&>(object);
          }
@@ -55,7 +71,7 @@
      };
  
      template <typename T>
-@@ -8112,7 +8135,9 @@
+@@ -8112,7 +8137,9 @@
  
          static time_point from_time_t(time_t time) noexcept
          {
@@ -66,7 +82,7 @@
          }
  
          static file_time to_file_time(time_point const& time) noexcept
-@@ -8392,7 +8417,7 @@
+@@ -8392,7 +8419,7 @@
              coroutine_handle<> m_handle;
          };
          auto state = std::make_unique<threadpool_resume>(context, handle);
@@ -75,7 +91,7 @@
              {
                  std::unique_ptr<threadpool_resume> state{ static_cast<threadpool_resume*>(p) };
                  resume_apartment_sync(state->m_context, state->m_handle);
-@@ -8949,8 +8974,10 @@
+@@ -8949,8 +8976,10 @@
  
  #ifdef __cpp_lib_coroutine
  namespace std
