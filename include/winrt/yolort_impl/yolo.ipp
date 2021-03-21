@@ -13,6 +13,22 @@
 #include <cstddef>
 using std::nullptr_t;  // for unqualified nullptr_t in winrt/base.h
 #include <climits>     // for UINT_MAX in winrt/base.h
+#include <cassert>
+
+namespace yolort
+{
+  inline void memcpy(
+    void *      const dst,
+    std::size_t const dstsize [[maybe_unused]],
+    const void *const src,
+    std::size_t const srcsize ) noexcept
+  {
+    assert( dst );
+    assert( src );
+    assert( srcsize <= dstsize );
+    std::memcpy( dst, src, srcsize );
+  }
+}
 
 
 #include <intrin.h>
@@ -48,7 +64,6 @@ inline unsigned char _InterlockedCompareExchange128(
 #include <type_traits>
 #include <sstream>
 #include <algorithm>
-#include <cassert>
 namespace std
 {
   // release the Kraken!

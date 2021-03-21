@@ -58,6 +58,15 @@
  
  #ifdef _M_HYBRID
  #define WINRT_IMPL_LINK(function, count) __pragma(comment(linker, "/alternatename:#WINRT_IMPL_" #function "@" #count "=#" #function "@" #count))
+@@ -2751,7 +2770,7 @@
+         }
+ 
+         auto header = precreate_hstring_on_heap(length);
+-        memcpy_s(header->buffer, sizeof(wchar_t) * length, value, sizeof(wchar_t) * length);
++        yolort::memcpy(header->buffer, sizeof(wchar_t) * length, value, sizeof(wchar_t) * length);
+         return header;
+     }
+ 
 @@ -3102,6 +3121,12 @@
          {
              return reinterpret_cast<R const&>(object);
@@ -71,6 +80,17 @@
      };
  
      template <typename T>
+@@ -3459,8 +3484,8 @@
+             return{};
+         }
+         hstring_builder text(size);
+-        memcpy_s(text.data(), left.size() * sizeof(wchar_t), left.data(), left.size() * sizeof(wchar_t));
+-        memcpy_s(text.data() + left.size(), right.size() * sizeof(wchar_t), right.data(), right.size() * sizeof(wchar_t));
++        yolort::memcpy(text.data(), left.size() * sizeof(wchar_t), left.data(), left.size() * sizeof(wchar_t));
++        yolort::memcpy(text.data() + left.size(), right.size() * sizeof(wchar_t), right.data(), right.size() * sizeof(wchar_t));
+         return text.to_hstring();
+     }
+ }
 @@ -8112,7 +8137,9 @@
  
          static time_point from_time_t(time_t time) noexcept
