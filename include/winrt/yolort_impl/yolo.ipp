@@ -85,7 +85,7 @@ namespace std
   inline to_chars_result to_chars(
     char *const first, char *const last,
     Float const value,
-    chars_format const fmt ) noexcept
+    chars_format const fmt [[maybe_unused]] ) noexcept
   {
     assert( fmt == chars_format::general );
     try
