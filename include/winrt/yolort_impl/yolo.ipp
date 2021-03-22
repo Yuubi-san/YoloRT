@@ -115,6 +115,11 @@ namespace std
   #pragma GCC diagnostic ignored "-Wunused-parameter"
   #pragma GCC diagnostic ignored "-Wconversion"
   #pragma GCC diagnostic ignored "-Wpedantic"
+  #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+  // ^ warning: dereferencing type-punned pointer will break strict-aliasing
+  //  rules
+  //  if (result == *(int64_t*)&current_value)
+  //                ^~~~~~~~~~~~~~~~~~~~~~~~
   #pragma GCC diagnostic ignored "-Wclass-memaccess"
   // ^ warning: 'void* memset(void*, int, size_t)' clearing an object of type
   //  'struct winrt::com_array<unsigned char>' with no trivial copy-assignment;
